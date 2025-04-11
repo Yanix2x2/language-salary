@@ -27,8 +27,9 @@ def get_vacancies(secret_key, lang):
     while next_page_exists:
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
-        vacancies['objects'] += response.json().get('objects')
-        vacancies['total'] = int(response.json().get('total'))
+        vacancies_data = response.json()
+        vacancies['objects'] += vacancies_data.get('objects')
+        vacancies['total'] = int(vacancies_data.get('total'))
         next_page_exists = vacancies.get('more')
         params['page'] += 1
     
