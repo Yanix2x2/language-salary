@@ -10,11 +10,15 @@ def get_vacancies(lang):
     total_vacancies = {'items': []}
 
     url = 'https://api.hh.ru/vacancies'
+    positions = 96
+    town = 1
+    days = 30
+    per_page = 100
     params = {
-        'professional_role': 96,
-        'area': 1,
-        'period': 30,
-        'per_page': 100,
+        'professional_role': positions,
+        'area': town,
+        'period': days,
+        'per_page': per_page,
         'page': page,
         'text': lang,
     } 

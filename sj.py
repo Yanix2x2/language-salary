@@ -13,11 +13,14 @@ def get_vacancies(secret_key, lang):
     next_page_exists = True
 
     headers = {'X-Api-App-Id': secret_key}
+    town = 4
+    per_page = 100
+    positions = 48
     params = {
-        't': 4,
-        'count': 100,
+        't': town,
+        'count': per_page,
         'page': page,
-        'catalogues': 48,
+        'catalogues': positions,
         'keyword': lang
     }
 
