@@ -11,13 +11,12 @@ def get_table(title, statistic):
         ]
     ]
 
-    for lang in statistic:
-        lang_stats = statistic[lang]
+    for lang, info in statistic.items():
         table_data.append([
             f'{lang}', 
-            f'{lang_stats["vacancies_found"]}',
-            f'{lang_stats["vacancies_processed"]}',
-            f'{lang_stats["average_salary"]}'
+            f'{info["vacancies_found"]}',
+            f'{info["vacancies_processed"]}',
+            f'{info["average_salary"]}'
         ])
 
     table = AsciiTable(table_data, title=title)
