@@ -9,31 +9,31 @@ def get_vacancies(secret_key, lang):
     url = 'https://api.superjob.ru/2.0/vacancies/'
 
     page = 0
-    objects = []
+    vacancies = []
     next_page_exists = True
 
     headers = {'X-Api-App-Id': secret_key}
     town = 4
     per_page = 100
-    positions = 48
+    position_id = 48
     params = {
         't': town,
         'count': per_page,
         'page': page,
-        'catalogues': positions,
+        'catalogues': position_id,
         'keyword': lang
     }
 
     while next_page_exists:
         response = requests.get(url, params=params, headers=headers)
         response.raise_for_status()
-        vacancies_data = response.json()
-        objects += vacancies_data.get('objects')
-        total_vacancies = int(vacancies_data.get('total'))
-        next_page_exists = vacancies_data.get('more')
+        api_response = response.json()
+        vacancies += api_response.get('objects')
+        total_vacancies = int(api_response.get('total'))
+        next_page_exists = api_response.get('more')
         params['page'] += 1
     
-    return (objects, total_vacancies)
+    return vacancies, total_vacancies
 
 
 def predict_rub_salary_for_superJob(vacancy):
@@ -59,10 +59,10 @@ def get_statistic(secret_key):
     statistic = defaultdict(int)
 
     for lang in popular_langs:
-        objects, total_vacancies = get_vacancies(secret_key, lang)
+        vacancies, total_vacancies = get_vacancies(secret_key, lang)
         total = 0
         vacancies_processed = 0
-        for vacancy in objects:
+        for vacancy in vacancies:
             salary = predict_rub_salary_for_superJob(vacancy) 
             if salary:
                 total += salary

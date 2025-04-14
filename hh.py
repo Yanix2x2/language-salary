@@ -7,7 +7,7 @@ from helper import predict_salary
 
 def get_vacancies(lang):
     page = 0
-    items = []
+    vacancies = []
 
     url = 'https://api.hh.ru/vacancies'
     positions = 96
@@ -26,12 +26,12 @@ def get_vacancies(lang):
     while page < pages_number:
         page_response = requests.get(url, params)
         page_response.raise_for_status()
-        vacancies = page_response.json()
-        items += vacancies['items']
-        total_vacancies = vacancies['found']
-        pages_number = vacancies['pages']
+        api_response = page_response.json()
+        vacancies += api_response['items']
+        total_vacancies = api_response['found']
+        pages_number = api_response['pages']
         page += 1
-    return (items, total_vacancies)
+    return vacancies, total_vacancies
 
 
 def predict_rub_salary(vacancy):
@@ -57,10 +57,10 @@ def get_statistic():
     ]
     statistic = defaultdict(int)
     for lang in popular_langs:
-        items, total_vacancies = get_vacancies(lang)
+        vacancies, total_vacancies = get_vacancies(lang)
         vacancies_processed = 0
         total = 0
-        for vacancy in items:
+        for vacancy in vacancies:
             salary = predict_rub_salary(vacancy) 
             if salary:
                 total += salary
